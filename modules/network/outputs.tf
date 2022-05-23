@@ -31,6 +31,9 @@ output "public_route_table" {
 }
 
 output "eip_address" {
-  value = aws_eip.nat_eip.address
+  value = aws_eip.nat_eip.public_ip
+  # value = "zzz"
 }
+
+
 
