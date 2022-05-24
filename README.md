@@ -4,12 +4,10 @@
 
 #### Infrastructure
 
-- solve lifecycle issue
-- create validator nodes
-- create public instances
-  - block explorer instance
-  - seed nodes 1 to 3
-- create rds db
+- change "block_explorer" to "explorer_fe"
+- split public into seed and explorer
+- use count for seed and validator
+- create rds explorer_db
 
 #### Provision nodes
 

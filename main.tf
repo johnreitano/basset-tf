@@ -15,8 +15,9 @@ module "ec2" {
   project     = var.project
   ssh_keypair = var.ssh_keypair
 
-  public_subnet_id = module.network.public_subnet_id
-  public_sg_id     = module.network.public_sg_id
-  # internet_gateway_id = module.network.internet_gateway_id
+  public_subnet_id    = module.network.public_subnet_id
+  public_sg_id        = module.network.public_sg_id
+  validator_subnet_id = module.network.validator_subnet_id
+  validator_sg_id     = module.network.validator_sg_id
 }
 

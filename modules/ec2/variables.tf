@@ -18,7 +18,11 @@ variable "public_sg_id" {
   description = "id of the public security group"
 }
 
+variable "validator_subnet_id" {
+  description = "id of the validator subnet"
+}
 
-# variable "internet_gateway_id" {
-#   description = "xxx"
-# }
+variable "validator_sg_id" {
+  description = "id of the validator security group"
+}
+

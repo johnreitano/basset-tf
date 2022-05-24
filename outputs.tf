@@ -6,6 +6,10 @@ output "seed_ip_address_1" {
   value = module.ec2.seed_ip_address_1
 }
 
+output "validator_ip_address_1" {
+  value = module.ec2.validator_ip_address_1
+}
+
 # output "seed_ip_address_2" {
 #   value = module.ec2.seed_ip_address_2
 # }

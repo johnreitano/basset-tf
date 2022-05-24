@@ -54,6 +54,13 @@ resource "aws_security_group" "validator" {
   }
 
   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["68.101.219.8/32"]
+  }
+
+  ingress {
     from_port   = 1317
     to_port     = 1317
     protocol    = "tcp"
