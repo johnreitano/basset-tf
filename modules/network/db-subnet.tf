@@ -11,9 +11,24 @@ resource "aws_subnet" "db" {
   }
 }
 
-resource "aws_route_table_association" "db_nat_gw_assoc" {
+resource "aws_route_table" "db" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Environment = var.env
+    Project     = var.project
+    Name        = "${var.project}-${var.env}-db-route-table"
+  }
+}
+
+resource "aws_route_table_association" "db" {
   subnet_id      = aws_subnet.db.id
-  route_table_id = aws_route_table.nat_gw.id
+  route_table_id = aws_route_table.db.id
 }
 
 resource "aws_security_group" "db" {

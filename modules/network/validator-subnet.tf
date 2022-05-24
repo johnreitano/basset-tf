@@ -1,8 +1,7 @@
 resource "aws_subnet" "validator" {
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.validator_subnet_cidr
-  map_public_ip_on_launch = false
-  availability_zone       = "us-west-2a"
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = var.validator_subnet_cidr
+  availability_zone = "us-west-2a"
 
   tags = {
     Environment = var.env
@@ -11,9 +10,24 @@ resource "aws_subnet" "validator" {
   }
 }
 
-resource "aws_route_table_association" "validator_nat_gw_assoc" {
+resource "aws_route_table" "validator" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Environment = var.env
+    Project     = var.project
+    Name        = "${var.project}-${var.env}-validator-route-table"
+  }
+}
+
+resource "aws_route_table_association" "validator" {
   subnet_id      = aws_subnet.validator.id
-  route_table_id = aws_route_table.nat_gw.id
+  route_table_id = aws_route_table.validator.id
 }
 
 resource "aws_security_group" "validator" {

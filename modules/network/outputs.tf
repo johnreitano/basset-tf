@@ -30,10 +30,6 @@ output "public_route_table" {
   value = aws_route_table.public.id
 }
 
-output "eip_address" {
-  value = aws_eip.nat_eip.public_ip
-  # value = "zzz"
-}
-
-
-
+# output "internet_gateway_id" {
+#   value = aws_internet_gateway.igw.id
+# }

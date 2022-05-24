@@ -11,12 +11,12 @@ resource "aws_subnet" "public" {
   }
 }
 
-resource "aws_internet_gateway" "ig" {
+resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     Environment = var.env
     Project     = var.project
-    Name        = "${var.project}-${var.env}-ig"
+    Name        = "${var.project}-${var.env}-igw"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_route_table" "public" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.ig.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = {
@@ -35,54 +35,41 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_eip" "nat_eip" {
-  vpc        = true
-  depends_on = [aws_internet_gateway.ig]
-  tags = {
-    Environment = var.env
-    Project     = var.project
-    Name        = "${var.project}-${var.env}-nat-eip"
-  }
-}
-
-resource "aws_nat_gateway" "nat_gw" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public.id
-
-  tags = {
-    Environment = var.env
-    Project     = var.project
-    Name        = "${var.project}-${var.env}-nat-gw"
-  }
-}
-
-resource "aws_route_table" "nat_gw" {
-  vpc_id = aws_vpc.vpc.id
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw.id
-  }
-
-  tags = {
-    Environment = var.env
-    Project     = var.project
-    Name        = "${var.project}-${var.env}-public-nat-gw-route-table"
-  }
-}
-
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
 
+# resource "aws_nat_gateway" "nat_gw" {
+#   allocation_id = aws_eip.eip_for_nat.id
+#   subnet_id     = aws_subnet.public.id
+
+#   tags = {
+#     Environment = var.env
+#     Project     = var.project
+#     Name        = "${var.project}-${var.env}-nat-gw"
+#   }
+# }
+
+# resource "aws_route_table" "nat_route_table" {
+#   vpc_id = aws_vpc.vpc.id
+
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = aws_nat_gateway.nat_gw.id
+#   }
+
+#   tags = {
+#     Environment = var.env
+#     Project     = var.project
+#     Name        = "${var.project}-${var.env}-nat-route-table"
+#   }
+# }
+
 resource "aws_security_group" "public" {
   name        = "${var.env}-public-sg"
   description = "SG to alllow traffic from the public seed nodes and web server"
   vpc_id      = aws_vpc.vpc.id
-  depends_on = [
-    aws_vpc.vpc
-  ]
 
   egress {
     from_port        = 0
@@ -93,12 +80,21 @@ resource "aws_security_group" "public" {
   }
 
   ingress {
+    description = "ssh"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["68.101.219.8/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
+    description = "https"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "http"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"

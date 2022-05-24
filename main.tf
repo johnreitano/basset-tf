@@ -17,5 +17,6 @@ module "ec2" {
 
   public_subnet_id = module.network.public_subnet_id
   public_sg_id     = module.network.public_sg_id
+  # internet_gateway_id = module.network.internet_gateway_id
 }
 

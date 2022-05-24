@@ -10,8 +10,8 @@ variable "profile" {
   type        = string
 }
 variable "env" {
-  description = "The env - either 'test' or 'main' -- used as suffix of resource names"
-  default     = "test"
+  description = "The env - either 'testnet' or 'mainnet' -- used as suffix of resource names"
+  default     = "testnet"
   type        = string
 }
 

@@ -17,3 +17,8 @@ variable "public_subnet_id" {
 variable "public_sg_id" {
   description = "id of the public security group"
 }
+
+
+# variable "internet_gateway_id" {
+#   description = "xxx"
+# }
