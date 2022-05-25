@@ -2,16 +2,20 @@
 
 ## TODOS
 
-#### Infrastructure
+#### Testnet
 
-- change "block_explorer" to "explorer_fe"
-- split public into seed and explorer
-- use count for seed and validator
-- create rds explorer_db
+- get 2 validators running
+- get 2 seeds running
+- get basic rds running and configured
+- get explorer be running and configured
+- get explorer fe running and configured
 
-#### Provision nodes
+#### Mainnet
 
-- provision validator nodes
-- provision seed nodes
-- block explorer (front-end)
-- proviion db (blockexplorer back end)
+- validator vpc
+- seed + explorer vpc
+  - get 3 seeds running
+  - get rds running and configured
+  - get hashura running and configured
+  - get explorer be running and configured
+  - get explorer fe running and configured
