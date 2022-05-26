@@ -34,7 +34,7 @@ resource "null_resource" "setup_instance" {
   # depends_on = [aws_eip.validator[count.index], aws_instance.validator[count.index]]
 
   provisioner "file" {
-    source      = "modules/ec2/setup.sh"
+    source      = "modules/validator/setup.sh"
     destination = "/tmp/setup.sh"
     connection {
       type        = "ssh"

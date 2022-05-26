@@ -46,3 +46,13 @@ variable "explorer_subnet_cidr" {
   description = "CIDR block for db subnet"
   default     = "10.0.3.0/24"
 }
+
+variable "num_seed_instances" {
+  description = "number of seed instances"
+  default     = 2
+}
+
+variable "num_validator_instances" {
+  description = "number of validator instances"
+  default     = 2
+}
