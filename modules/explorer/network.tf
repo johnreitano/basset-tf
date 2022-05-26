@@ -1,42 +1,38 @@
-resource "aws_subnet" "validator" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.validator_subnet_cidr
+resource "aws_subnet" "explorer" {
+  vpc_id            = var.vpc_id
+  cidr_block        = var.subnet_cidr
   availability_zone = "us-west-2a"
 
   tags = {
     Environment = var.env
     Project     = var.project
-    Name        = "${var.project}-${var.env}-validator-subnet"
+    Name        = "${var.project}-${var.env}-explorer-subnet"
   }
 }
 
-resource "aws_route_table" "validator" {
-  vpc_id = aws_vpc.vpc.id
-
+resource "aws_route_table" "explorer" {
+  vpc_id = var.vpc_id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
+    gateway_id = var.igw_id
   }
 
   tags = {
     Environment = var.env
     Project     = var.project
-    Name        = "${var.project}-${var.env}-validator-route-table"
+    Name        = "${var.project}-${var.env}-explorer-route-table"
   }
 }
 
-resource "aws_route_table_association" "validator" {
-  subnet_id      = aws_subnet.validator.id
-  route_table_id = aws_route_table.validator.id
+resource "aws_route_table_association" "explorer" {
+  subnet_id      = aws_subnet.explorer.id
+  route_table_id = aws_route_table.explorer.id
 }
 
-resource "aws_security_group" "validator" {
-  name        = "${var.env}-validator-sg"
-  description = "SG to alllow traffic from the validator clients"
-  vpc_id      = aws_vpc.vpc.id
-  depends_on = [
-    aws_vpc.vpc
-  ]
+resource "aws_security_group" "explorer" {
+  name        = "${var.env}-explorer-sg"
+  description = "SG to alllow traffic from the explorer clients"
+  vpc_id      = var.vpc_id
 
   egress {
     from_port        = 0
@@ -91,7 +87,7 @@ resource "aws_security_group" "validator" {
   tags = {
     Environment = var.env
     Project     = var.project
-    Name        = "${var.project}-${var.env}-validator-sg"
+    Name        = "${var.project}-${var.env}-explorer-sg"
   }
 }
 

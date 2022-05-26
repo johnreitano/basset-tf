@@ -1,23 +1,35 @@
-module "network" {
-  source                = "./modules/network"
-  region                = var.region
-  env                   = var.env
-  project               = var.project
-  vpc_cidr              = var.vpc_cidr
-  public_subnet_cidr    = var.public_subnet_cidr
-  validator_subnet_cidr = var.validator_subnet_cidr
-  db_subnet_cidr        = var.db_subnet_cidr
+module "validator" {
+  source        = "./modules/validator"
+  env           = var.env
+  project       = var.project
+  ssh_keypair   = var.ssh_keypair
+  vpc_id        = aws_vpc.vpc.id
+  igw_id        = aws_internet_gateway.igw.id
+  subnet_cidr   = var.validator_subnet_cidr
+  ami           = data.aws_ami.latest-ubuntu.id
+  num_instances = 3
 }
 
-module "ec2" {
-  source      = "./modules/ec2"
+module "seed" {
+  source        = "./modules/seed"
+  env           = var.env
+  project       = var.project
+  ssh_keypair   = var.ssh_keypair
+  vpc_id        = aws_vpc.vpc.id
+  igw_id        = aws_internet_gateway.igw.id
+  subnet_cidr   = var.validator_subnet_cidr
+  ami           = data.aws_ami.latest-ubuntu.id
+  num_instances = 3
+}
+
+module "explorer" {
+  source      = "./modules/explorer"
   env         = var.env
   project     = var.project
   ssh_keypair = var.ssh_keypair
-
-  public_subnet_id    = module.network.public_subnet_id
-  public_sg_id        = module.network.public_sg_id
-  validator_subnet_id = module.network.validator_subnet_id
-  validator_sg_id     = module.network.validator_sg_id
+  vpc_id      = aws_vpc.vpc.id
+  igw_id      = aws_internet_gateway.igw.id
+  subnet_cidr = var.explorer_subnet_cidr
+  ami         = data.aws_ami.latest-ubuntu.id
 }
 

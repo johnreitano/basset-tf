@@ -1,10 +1,10 @@
 resource "aws_instance" "validator" {
   count                       = 3
-  ami                         = data.aws_ami.latest-ubuntu.id
+  ami                         = var.ami
   instance_type               = "t2.medium"
-  subnet_id                   = var.public_subnet_id
+  subnet_id                   = aws_subnet.validator.id
   key_name                    = var.ssh_keypair
-  vpc_security_group_ids      = [var.public_sg_id]
+  vpc_security_group_ids      = [aws_security_group.validator.id]
   associate_public_ip_address = false
 
   lifecycle {
@@ -30,7 +30,7 @@ resource "aws_eip" "validator" {
 }
 
 resource "null_resource" "setup_instance" {
-  count = 2
+  count = var.num_instances
   # depends_on = [aws_eip.validator[count.index], aws_instance.validator[count.index]]
 
   provisioner "file" {
@@ -47,7 +47,7 @@ resource "null_resource" "setup_instance" {
     inline = [
       "chmod +x /tmp/setup.sh",
       "sudo /tmp/setup.sh",
-      "echo provisioning node ${count.index}"
+      "echo provisioning validator snode ${count.index}"
     ]
     connection {
       type        = "ssh"

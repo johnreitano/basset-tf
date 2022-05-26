@@ -22,7 +22,7 @@ variable "project" {
 }
 
 variable "ssh_keypair" {
-  description = "SSH keypair to use for EC2 instance"
+  description = "SSH keypair to use for EC2 instances"
   default     = "john-pubkey"
   type        = string
 }
@@ -32,8 +32,8 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "public_subnet_cidr" {
-  description = "CIDR block for public subnet"
+variable "seed_subnet_cidr" {
+  description = "CIDR block for seed subnet"
   default     = "10.0.1.0/24"
 }
 
@@ -42,7 +42,7 @@ variable "validator_subnet_cidr" {
   default     = "10.0.2.0/24"
 }
 
-variable "db_subnet_cidr" {
+variable "explorer_subnet_cidr" {
   description = "CIDR block for db subnet"
   default     = "10.0.3.0/24"
 }

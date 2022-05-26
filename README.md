@@ -4,7 +4,7 @@
 
 #### Testnet
 
-- get 2 validators running
+- get 3 validators running
 - get 2 seeds running
 - get basic rds running and configured
 - get explorer be running and configured
